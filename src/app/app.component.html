@@ -1,1 +1,30 @@
-<button (click)="createCompany()"> Create A company</button>
+<!-- <button (click)="getCompany()">Оновити компанії</button> -->
+<form (ngSubmit)="createCompany(loginForm)" #loginForm="ngForm">
+    <div class="form-group">
+        <label>Name Company</label>
+        <input   type="text" class="form-control" id="nameCompany" name="nameCompany" ngModel>
+    </div>
+    <div class="form-group">
+        <label>Years budjet</label>
+        <input  type="number" class="form-control" id="yearsAmount" name="yearsAmount" ngModel>
+    </div>
+    <button type="submit"> Create A company</button>
+</form>
+<ul>
+    <li *ngFor="let company of companies">
+        <h1>Name:{{company.name}}, budjet: {{company.budget}}</h1>
+        <button (click)="delete(company)">delete</button>
+        <form (ngSubmit)="edit(editable, company)" #editable="ngForm">
+            <div class="form-group">
+                <label>Name Company</label>
+                <input type="text" class="form-control" id="nameCompany" name="nameCompany" ngModel>
+            </div>
+            <div class="form-group">
+                <label>Years budjet</label>
+                <input type="number" class="form-control" id="yearsAmount" name="yearsAmount" ngModel>
+            </div>
+            <button type="submit">>edit</button>
+        </form>
+
+    </li>
+</ul>
