@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { AngularFireModule,  } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
-import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database-deprecated';
+import { AngularFireDatabaseModule, AngularFireDatabase } from 'angularfire2/database';
+import { FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database-deprecated';
 import { AngularFirestore } from 'angularfire2/firestore';
 import * as firebase from "firebase";
 import 'firebase/firestore';
@@ -13,15 +14,18 @@ import { environment } from './../environments/environment';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+   database = firebase.database();
 
-  constructor (private afs: AngularFirestore) {
-    const firestore = firebase.firestore();
-    const settings = {timestampsInSnapshots: true};
-    afs.firestore.settings(settings);
-    firebase.initializeApp(environment.firebaseConfig)
+  constructor (private afs: AngularFirestore,
+    private db: AngularFireDatabase) {
+
   }
 
   createCompany() {
-    const collection = firebase.firestore().collection('mainCompany');
+    this.database.ref('mainCompany').set({
+      budget: 35
+    })
+
+
   }
 }
