@@ -18,6 +18,7 @@ import { environment } from './../environments/environment';
 export class AppComponent implements OnInit {
    database = firebase.database();
   companies = [];
+  i = 0;
 
   constructor (private afs: AngularFirestore,
     private db: AngularFireDatabase) {
@@ -33,10 +34,11 @@ export class AppComponent implements OnInit {
       });
   }
   createCompany(form: NgForm) {
+    
     const nameCompany = form.form.value.nameCompany;
     const yearsAmount = form.form.value.yearsAmount;
     console.log(nameCompany, yearsAmount)
-    this.database.ref('/company/' + nameCompany).set({
+    this.database.ref('/company/' + this.i++).set({
       name: nameCompany,
       budget: yearsAmount
     })
@@ -49,16 +51,21 @@ export class AppComponent implements OnInit {
   edit(form: NgForm, company) {
     const nameCompany = form.form.value.nameCompany;
     const yearsAmount = form.form.value.yearsAmount;
-    console.log(nameCompany, yearsAmount)
+    console.log(nameCompany, yearsAmount);
     console.log(company.name);
-    let tmp = { 
-      name: nameCompany,
-      budget: yearsAmount
+    let tmp = {
+      budget: yearsAmount,
+      name: nameCompany
     };
+    firebase.database().ref('/company/' + company.name).on('value', function(snapshot) {
+      console.log(snapshot.val());
+      console.log(company.name);
+      console.log(firebase.database().ref('/company/' + company.name  ));
+      var updates = {};
+      updates['/company/' + company.name] = tmp;
     
-    this.db.list('/company/' + company.name).set(company, {
-      name: nameCompany,
-      budget: yearsAmount
+      return firebase.database().ref().update(updates);
+      // firebase.database().ref('/company/' + company.name ).set(snapshot.val(), tmp);
     });
   }
 }
